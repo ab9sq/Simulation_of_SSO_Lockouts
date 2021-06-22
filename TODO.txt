@@ -1,5 +1,4 @@
-<<<<<<< HEAD
-     Set up
+DONE Set up
 Done      gitignore
 Done      TODo list and notes
 Done      directory structure
