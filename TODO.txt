@@ -1,0 +1,8 @@
+     Develop Sim function
+          in prarmaters:
+               runs
+               sites = Data centers
+          output:
+               vector - length = number of trials
+               number of attempts to lockout
+     Seave Report
