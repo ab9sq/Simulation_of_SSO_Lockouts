@@ -1,12 +1,13 @@
 # simulation run function
-sim <- function(run = 100,
+sim <- function(run = 1000,
                 sites = 2){
      runs <- 1:run
-     dcCount[1:sites] <- 0
-     test <- FALSE
-     trialCount <- 0
      results <- NULL
      for(index in runs){
+          trialCount <- 0
+          test <- FALSE
+          dcCount <- NULL
+          dcCount[1:sites] <- 0
           while(test == FALSE){
                trialCount <- trialCount + 1
                dataCenter <- siteSelectioned(sites = sites)
@@ -16,7 +17,7 @@ sim <- function(run = 100,
                }
           }
           results[index] <- trialCount
-          trialCount <- 0
+
      }
      return(results)
 }
