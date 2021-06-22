@@ -1,0 +1,17 @@
+     Set up
+Done      gitignore
+Done      TODo list and notes
+Done      directory structure
+Done       R function as a script
+Done      Sweave Report framework
+     Develop Sim function
+          in prarmaters:
+               runs
+               sites = Data centers
+          output:
+               vector - length = number of trials
+               number of attempts to lockout
+     Random number generator function
+          unifor
+          interger output
+     Seave Report
