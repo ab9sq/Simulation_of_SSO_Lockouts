@@ -1,0 +1,89 @@
+---
+title: "Untitled"
+author: "Nick lauerman"
+date: "6/22/2021"
+output: 
+  pdf_document: 
+    fig_width: 4.5
+    number_sections: yes
+    toc: yes
+---
+
+```{r rmd-setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Setup
+## Libries
+```{r libraries}
+library(MASS)
+```
+
+## Scripts
+```{r scripts}
+source(file = "./R/DC_LO_Sim.R")
+```
+
+# Single Sim
+Will use default of 1,000 runs with 2 sites
+```{r single sim}
+lockOut <- sim()
+mean(lockOut)
+sd(lockOut)
+table(lockOut)
+prop.table(table(lockOut))*100
+hist(lockOut)
+hist(lockOut, freq = FALSE)
+truehist(lockOut)
+```
+
+# multiple Sites
+Sim with 1,000 runs per site and from2 to 10 sites
+```{r multi sites}
+sites <- 2:10
+run <- 1000
+#rawData <- NULL
+#rawData[1:max(sites)] <- 0
+catcher <- NULL
+catcher[1:max(sites)] <- 0
+for (index in sites) {
+     lockOut <- sim(run = run,
+                    sites = index)
+     #rawData[index] <- lockOut
+     catcher[index] <- mean(lockOut)
+}
+plot(catcher[sites])
+```
+
+# Microsoft sized
+Assuming that the advertised 47 sites and bock up locations for Azure
+is all data centers and that some data centers serve as back up locations for other sites.
+```{r large multi sites}
+sites <- 2:47
+run <- 1000
+#rawData <- NULL
+#rawData[1:max(sites)] <- 0
+catcher <- NULL
+catcher[1:max(sites)] <- 0
+for (index in sites) {
+     lockOut <- sim(run = run,
+                    sites = index)
+     #rawData[index] <- lockOut
+     catcher[index] <- mean(lockOut)
+}
+plot(catcher[sites])
+```
+
+## detialed look at 47 sites
+```{r looking at 47 sites detials}
+lockOut <- sim(run = 1000,
+               sites = 47)
+mean(lockOut)
+sd(lockOut)
+table(lockOut)
+prop.table(table(lockOut))*100
+hist(lockOut)
+hist(lockOut, freq = FALSE)
+truehist(lockOut)
+```
+
