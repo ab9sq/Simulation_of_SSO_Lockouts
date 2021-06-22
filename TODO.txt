@@ -11,7 +11,7 @@ Done      Sweave Report framework
           output:
                vector - length = number of trials
                number of attempts to lockout
-     Random number generator function
+DONE Random number generator function
           unifor
           interger output
      Seave Report
