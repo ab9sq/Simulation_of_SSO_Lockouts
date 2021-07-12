@@ -69,14 +69,14 @@ This simulation is based on the following assumptions.
 \begin{enumerate}
 \item That there are 47 Azure (Microsoft cloud) data centers.
 Recent Microsoft advertising indicated that there are 47 data centers
-or backup locations supporting Azure. The part of the assumption is
+or backup locations supporting Azure. The specific assumption is
 that there are no stand-alone backup location but one data center
-servers as a backup location for one or more other data centers.
-\item That any log in attempt will have an equal chance to be
+serves as a backup location for one or more other data centers.
+\item That any log-in attempt will have an equal chance to be
 assigned to any available data center
 \item That the only impact on the number of attempts prior to lockout is
-from the counting of login attempts at the individual data centers. Even though
-this is a significant impact there are other factors in teh "Smart Logout" feature
+from the counting of failed log-in attempts at the individual data centers. Even though
+this is a significant impact there are other factors in the "Smart Logout" feature
 that would potentionally increase the total log in attempts.
 \item That the random number generator has sufficient entropy for
 the purpose of this simulation.
@@ -103,13 +103,13 @@ show the impact of the added data centers
 		\hline \hline
 		Parameter & Value \\ \hline \hline
 		Data Centers & 2 \\ \hline
-		Simulation Runs & 10,000 \\ \hline \hline
+		Simulation Runs & 1,000 \\ \hline \hline
 	\end{tabular}
 	\label{tab:Sim1_set}
 \end{table}
 
 <<simulation 1, echo=FALSE>>=
-Runs = 10000
+Runs = 1000
 Site = 2
 results_1_2 <- NULL
 results_1_1 <- sim(run = Runs,
@@ -157,13 +157,13 @@ Activity Directory
 		\hline \hline
 		Parameter & Value \\ \hline \hline
 		Data Centers & 47 \\ \hline
-		Simulation Runs & 10,000 \\ \hline \hline
+		Simulation Runs & 1,000 \\ \hline \hline
 	\end{tabular}
 	\label{tab:Sim2_set}
 \end{table}
 
 <<simulation 2, echo=FALSE>>=
-Runs = 10000
+Runs = 1000
 Site = 47
 results_2_2 <- NULL
 results_2_1 <- sim(run = Runs,
@@ -201,8 +201,9 @@ truehist(results_2_1)
 \end{figure}
 
 \subsection{Projection of number of attempts}
-We will now create a graph showing the number of attempts for data center
-with a minimum of 2 and a maximum of 47.
+Thisgraph shows the average number of attempts for data center
+with a minimum of 2 and a maximum of 47. It also shows a linear
+fit to the data along with the range for the 99.9\% confidence interval.
 
 \begin{table}[H]
 	\centering
@@ -211,14 +212,14 @@ with a minimum of 2 and a maximum of 47.
 		\hline \hline
 		Parameter & Value \\ \hline \hline
 		Data Centers & 2 to 47 \\ \hline
-		Simulation Runs & 10,000 \\ \hline \hline
+		Simulation Runs & 1,000 \\ \hline \hline
 	\end{tabular}
 	\label{tab:Sim3_set}
 \end{table}
 
 <<simulation 3, echo=FALSE>>=
 sites <- 2:47
-run <- 10000
+run <- 1000
 
 for (index in sites) {
      lockOut <- sim(run = run,
@@ -253,11 +254,12 @@ ggplot(results_3, aes(x=center,
      geom_point()+
      xlab("Data Centers") +
      ylab("Average Number to User Lockout") +
+     theme_bw() +
      geom_smooth(method = lm,
                  se = TRUE,
                  level = 0.999)
 @
-	\caption{Plot showing prodected number of attempts for lockout for verious
+	\caption{Garph showing prodicted number of attempts for lockout for verious
 	number of data centers.}
 	\label{fig:hist_3}
 \end{figure}
