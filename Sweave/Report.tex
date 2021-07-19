@@ -25,14 +25,10 @@
 	linkcolor={blue!80!black},
 	citecolor={blue!80!black},
 	urlcolor={blue!80!black}}
+%\usepackage{Sweave}
 \begin{document}
-\SweaveOpts{concordance=TRUE}
+%\input{Report-concordance}
 
-<<setup, echo=FALSE>>=
-library(MASS)
-library(tidyverse)
-source("../R/DC_LO_Sim.R")
-@
 
 
 \title{"Monte Carlo Simulation of Lockout From Multiple Data Centers"}
@@ -108,18 +104,6 @@ show the impact of the added data center.
 	\label{tab:Sim1_set}
 \end{table}
 
-<<simulation 1, echo=FALSE>>=
-Runs = 1000
-Site = 2
-results_1_2 <- NULL
-results_1_1 <- sim(run = Runs,
-                sites = Site)
-results_1_2[1] <- mean(results_1_1)
-results_1_2[2] <- sd(results_1_1)
-results_1_2[3] <- median(results_1_1)
-results_1_2[4] <- max(results_1_1)
-results_1_2[5] <- min(results_1_1)
-@
 
 \subsubsection*{Results}
 \begin{table}[H]
@@ -128,22 +112,18 @@ results_1_2[5] <- min(results_1_1)
 	\begin{tabular}{||r|l||}
 		\hline \hline
 		Result                  & Value                     \\ \hline \hline
-		Mean                    & \Sexpr{results_1_2[1]}    \\ \hline
-		Standard Deviation      & \Sexpr{results_1_2[2]}    \\ \hline
-		Median                  & \Sexpr{results_1_2[3]}    \\ \hline
-		Maxinum                 & \Sexpr{results_1_2[4]}    \\ \hline
-		Minimum                 & \Sexpr{results_1_2[5]}    \\ \hline \hline
+		Mean                    & 16.357    \\ \hline
+		Standard Deviation      & 1.98632738905159    \\ \hline
+		Median                  & 17    \\ \hline
+		Maxinum                 & 19    \\ \hline
+		Minimum                 & 10    \\ \hline \hline
 	\end{tabular}
 	\label{tab:Sim1_res}
 \end{table}
 
 \begin{figure}[H]
 \centering
-<<fig=TRUE, echo=FALSE>>=
-truehist(results_1_1,
-         xlab = "Attempts to Lockout",
-         prob = FALSE)
-@
+\includegraphics{Report-003}
 	\caption{Histogram for 2 data centers}
 	\label{fig:hist_1}
 \end{figure}
@@ -164,18 +144,6 @@ Activity Directory
 	\label{tab:Sim2_set}
 \end{table}
 
-<<simulation 2, echo=FALSE>>=
-Runs = 1000
-Site = 47
-results_2_2 <- NULL
-results_2_1 <- sim(run = Runs,
-                sites = Site)
-results_2_2[1] <- mean(results_1_1)
-results_2_2[2] <- sd(results_1_1)
-results_2_2[3] <- median(results_1_1)
-results_2_2[4] <- max(results_1_1)
-results_2_2[5] <- min(results_1_1)
-@
 
 \subsubsection*{Results}
 \begin{table}[H]
@@ -184,22 +152,18 @@ results_2_2[5] <- min(results_1_1)
 	\begin{tabular}{||r|l||}
 		\hline \hline
 		Result                  & Value                     \\ \hline \hline
-		Mean                    & \Sexpr{results_2_2[1]}    \\ \hline
-		Standard Deviation      & \Sexpr{results_2_2[2]}    \\ \hline
-		Median                  & \Sexpr{results_2_2[3]}    \\ \hline
-		Maxinum                 & \Sexpr{results_2_2[4]}    \\ \hline
-		Minimum                 & \Sexpr{results_2_2[5]}    \\ \hline \hline
+		Mean                    & 16.357    \\ \hline
+		Standard Deviation      & 1.98632738905159    \\ \hline
+		Median                  & 17    \\ \hline
+		Maxinum                 & 19    \\ \hline
+		Minimum                 & 10    \\ \hline \hline
 	\end{tabular}
 	\label{tab:Sim2_res}
 \end{table}
 
 \begin{figure}[H]
 \centering
-<<fig=TRUE, echo=FALSE>>=
-truehist(results_2_1,
-         xlab = "Attempts to Lockout",
-         prob = FALSE)
-@
+\includegraphics{Report-005}
 	\caption{Histogram for 47 data centers}
 	\label{fig:hist_2}
 \end{figure}
@@ -222,60 +186,11 @@ it shoes the theoritical maximun and the required number (10).
 	\label{tab:Sim3_set}
 \end{table}
 
-<<simulation 3, echo=FALSE>>=
-sites <- 2:47
-run <- 1000
-
-for (index in sites) {
-     lockOut <- sim(run = run,
-                    sites = index)
-     if(index == 2){
-          results_3 <- data.frame(center = index,
-                                  average = mean(lockOut),
-                                  StandDev = sd(lockOut),
-                                  median = median(lockOut),
-                                  max = max(lockOut) ,
-                                  min = min(lockOut),
-                                  TMax = (index * 9) + 1,
-                                  stringsAsFactors = FALSE)
-     } else {
-          temp <- data.frame(center = index,
-                             average = mean(lockOut),
-                             StandDev = sd(lockOut),
-                             median = median(lockOut),
-                             max = max(lockOut) ,
-                             min = min(lockOut),
-                             TMax = (index * 9) + 1,
-                             stringsAsFactors = FALSE)
-          results_3 <- rbind(results_3, temp)
-     }
-}
-@
 
 
 \begin{figure}[H]
 \centering
-<<fig=TRUE, echo=FALSE>>=
-ggplot(results_3, aes(x=center,
-                    y=average)) +
-     geom_point(shape = 3)+
-     geom_line(aes(y=TMax),
-               color = "red") +
-     xlab("Data Centers") +
-     ylab("Number of Failed Attempts to Lockout") +
-     #theme_bw() +
-     geom_smooth(method = lm,
-                 se = TRUE,
-                 level = 0.99,
-                 size = 0.25,
-                 color = "blue") +
-     geom_hline(yintercept = 10,
-                color = "green") +
-     theme(panel.grid.major = element_blank(),
-           panel.grid.minor = element_blank(),
-           panel.background = element_blank(),
-           axis.line = element_line(colour = "black"))
-@
+\includegraphics{Report-007}
 	\caption{Garph showing prodicted number of attempts for lockout for up to 47
 	data centers}
 	\label{fig:plot_3}
@@ -300,60 +215,11 @@ it shoes the theoritical maximun and the required number (10).
 	\label{tab:Sim4_set}
 \end{table}
 
-<<simulation 4, echo=FALSE>>=
-sites <- 2:10
-run <- 1000
-
-for (index in sites) {
-     lockOut <- sim(run = run,
-                    sites = index)
-     if(index == 2){
-          results_4 <- data.frame(center = index,
-                                  average = mean(lockOut),
-                                  StandDev = sd(lockOut),
-                                  median = median(lockOut),
-                                  max = max(lockOut) ,
-                                  min = min(lockOut),
-                                  TMax = (index * 9) + 1,
-                                  stringsAsFactors = FALSE)
-     } else {
-          temp <- data.frame(center = index,
-                             average = mean(lockOut),
-                             StandDev = sd(lockOut),
-                             median = median(lockOut),
-                             max = max(lockOut) ,
-                             min = min(lockOut),
-                             TMax = (index * 9) + 1,
-                             stringsAsFactors = FALSE)
-          results_4 <- rbind(results_4, temp)
-     }
-}
-@
 
 
 \begin{figure}[H]
 \centering
-<<fig=TRUE, echo=FALSE>>=
-ggplot(results_4, aes(x=center,
-                    y=average)) +
-     geom_point(shape = 3)+
-     geom_line(aes(y=TMax),
-               color = "red") +
-     xlab("Data Centers") +
-     ylab("Number of Failed Attempts to Lockout") +
-     #theme_bw() +
-     geom_smooth(method = lm,
-                 se = TRUE,
-                 level = 0.99,
-                 size = 0.25,
-                 color = "blue") +
-     geom_hline(yintercept = 10,
-                color = "green") +
-     theme(panel.grid.major = element_blank(),
-           panel.grid.minor = element_blank(),
-           panel.background = element_blank(),
-           axis.line = element_line(colour = "black"))
-@
+\includegraphics{Report-009}
 	\caption{Garph showing prodicted number of attempts for lockout for up to 10
 	data centers}
 	\label{fig:plot_4}

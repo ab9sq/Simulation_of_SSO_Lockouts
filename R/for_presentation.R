@@ -1,8 +1,8 @@
 library(tidyverse)
-source("../R/DC_LO_Sim.R")
+source("./R/DC_LO_Sim.R")
 
 
-sites <- 2:6
+sites <- 2:8
 run <- 1000
 
 for (index in sites) {
@@ -50,6 +50,7 @@ ggplot(results, aes(x=center,
            panel.background = element_blank(),
            axis.line = element_line(colour = "black"))
 
+ggsave("./images/results.jpg")
 
 sites <- 2:47
 run <- 1000
@@ -97,4 +98,4 @@ ggplot(results_47, aes(x=center,
            panel.grid.minor = element_blank(),
            panel.background = element_blank(),
            axis.line = element_line(colour = "black"))
-
+ggsave("./images/results_47.jpg")
